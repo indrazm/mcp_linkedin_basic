@@ -1,8 +1,9 @@
+import os
+
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi_mcp import add_mcp_server
 from linkedin_api import Linkedin
-from dotenv import load_dotenv
-import os
 
 load_dotenv(override=True)
 

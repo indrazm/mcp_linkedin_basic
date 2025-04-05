@@ -6,6 +6,6 @@ This repo is to test MCP within a simple client.
 
 ```
 uv sync
-uv run uvicorn main:app
+uv run uvicorn server:app
 uv run client.py
 ```

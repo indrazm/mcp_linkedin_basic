@@ -1,6 +1,6 @@
-from dotenv import load_dotenv
 from agents import Agent, Runner
-from agents.mcp import MCPServerStdio, MCPServer
+from agents.mcp import MCPServer, MCPServerStdio
+from dotenv import load_dotenv
 
 load_dotenv(override=True)
 
@@ -9,6 +9,7 @@ async def run(mcp_server: MCPServer):
     messages = []
     agent = Agent(
         name="welcome",
+        model="gpt-4o-mini",
         instructions="""
         You are a helpful assistant.
         Your job is to answer the user query.
@@ -26,13 +27,12 @@ async def run(mcp_server: MCPServer):
         query = input("Query: ")
         if query == "exit":
             is_run = False
+            break
 
         messages.append({"role": "user", "content": query})
         response = await Runner.run(agent, input=messages)
-
         messages = response.to_input_list()
 
-        print(messages)
         print(f"Answer: {response.final_output}")
 
 
