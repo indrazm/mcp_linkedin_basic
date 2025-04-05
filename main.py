@@ -3,6 +3,7 @@ from fastapi_mcp import add_mcp_server
 from linkedin_api import Linkedin
 from dotenv import load_dotenv
 import os
+
 load_dotenv(override=True)
 
 LINKEDIN_USERNAME = os.getenv("LINKEDIN_USERNAME")
@@ -18,7 +19,8 @@ mcp_server = add_mcp_server(
     name="My API MCP",
 )
 
+
 @mcp_server.tool()
-async def get_profile(username:str) -> str:
+async def get_profile(username: str) -> str:
     profile = api.get_profile(username)
     return profile

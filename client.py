@@ -6,9 +6,35 @@ load_dotenv(override=True)
 
 
 async def run(mcp_server: MCPServer):
-    agent = Agent(name="agent", instructions="Use the tools to get linkedin profile", mcp_servers=[mcp_server])
-    result = await Runner.run(agent, "Summarize me profile of pauliusztin, and then give me his email address",)
-    print(result.final_output)
+    messages = []
+    agent = Agent(
+        name="welcome",
+        instructions="""
+        You are a helpful assistant.
+        Your job is to answer the user query.
+        
+        IMPORTANT :
+        - You are only allowed to use tools when necessary.
+        - Do not answer anything that is not related to the linkedin profile.
+        - If user asking about something outside linkedin profile, say that you can not help.
+        """,
+        mcp_servers=[mcp_server],
+    )
+
+    is_run = True
+    while is_run:
+        query = input("Query: ")
+        if query == "exit":
+            is_run = False
+
+        messages.append({"role": "user", "content": query})
+        response = await Runner.run(agent, input=messages)
+
+        messages = response.to_input_list()
+
+        print(messages)
+        print(f"Answer: {response.final_output}")
+
 
 async def main():
     async with MCPServerStdio(
@@ -18,7 +44,9 @@ async def main():
         }
     ) as server:
         await run(server)
-        
+
+
 if __name__ == "__main__":
     import asyncio
+
     asyncio.run(main())
